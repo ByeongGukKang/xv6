@@ -594,25 +594,24 @@ ps(int pid)
       if (p->state == UNUSED) {
         continue;
       }
-      char str_state [8];
       switch (p->state) {
         case UNUSED:
-          str_state = "UNUSED";
+          char str_state [] = "UNUSED";
           break;
         case EMBRYO:
-          str_state = "EMBRYO";
+          char str_state [] = "EMBRYO";
           break;
         case SLEEPING:
-          str_state = "SLEEPING";
+          char str_state [] = "SLEEPING";
           break;
         case RUNNABLE:
-          str_state = "RUNNABLE";
+          char str_state [] = "RUNNABLE";
           break;
         case RUNNING:
-          str_state = "RUNNING";
+          char str_state [] = "RUNNING";
           break;
         case ZOMBIE:
-          str_state = "ZOMBIE";
+          char str_state [] = "ZOMBIE";
           break;
       }
       cprintf("%s    %d    %s    %d\n", p->name, p->pid, str_state, p->nice);
@@ -620,25 +619,24 @@ ps(int pid)
   } else {
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if ((p->pid == pid) & (p->state != UNUSED)) {
-      char str_state [8];
       switch (p->state) {
         case UNUSED:
-          str_state = "UNUSED";
+          char str_state [] = "UNUSED";
           break;
         case EMBRYO:
-          str_state = "EMBRYO";
+          char str_state [] = "EMBRYO";
           break;
         case SLEEPING:
-          str_state = "SLEEPING";
+          char str_state [] = "SLEEPING";
           break;
         case RUNNABLE:
-          str_state = "RUNNABLE";
+          char str_state [] = "RUNNABLE";
           break;
         case RUNNING:
-          str_state = "RUNNING";
+          char str_state [] = "RUNNING";
           break;
         case ZOMBIE:
-          str_state = "ZOMBIE";
+          char str_state [] = "ZOMBIE";
           break;
       }
         cprintf("name    pid    state    nice    \n");
