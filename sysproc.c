@@ -118,7 +118,7 @@ sys_setnice(void)
   if (argint(0, &pid) < 0 || argint(1, &value) < 0) {
     return -1;
   } else if (value < 0 || value > 39) {
-    cprintf(1, "Invalid nice value, Nice value must be 0~39.\n");
+    cprintf("Invalid nice value, Nice value must be 0~39.\n");
     return -1;
   }
   
