@@ -19,7 +19,11 @@ int main()
             printf(1, "Nice value: %d\n", nice);
         }
 
-        setnice(i, 15);
+        if (setnice(i, 15) != 0) {
+            printf(1, "Set nice failed\n");
+            iswrongpid = 1;
+        }
+
         if (getnice(i) == -1) {
             iswrongpid = 1;
         } else {
