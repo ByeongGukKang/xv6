@@ -19,6 +19,15 @@ int main()
             printf(1, "Nice value: %d\n", nice);
         }
 
+        setnice(i, 15);
+        if (getnice(i) == -1) {
+            iswrongpid = 1;
+        } else {
+            printf(1, "Nice value: %d\n", nice);
+        }
+
+        setnice(i, 40);
+
         if (iswrongpid) {
             printf(1, "Wrong pid\n");
         }
