@@ -9,7 +9,7 @@ int main()
     //     printf(1, "%d: ", i);
     // }
 
-    ps(0);
+    ps(1);
 
     exit();
 }
