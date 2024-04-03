@@ -594,13 +594,49 @@ ps(int pid)
       if (p->state == UNUSED) {
         continue;
       }
-      cprintf("%s    %d    %s    %d\n", p->name, p->pid, p->state, p->nice);
+      char str_state [8];
+      switch (p->state) {
+        case EMBRYO:
+          str_state = "EMBRYO";
+          break;
+        case SLEEPING:
+          str_state = "SLEEPING";
+          break;
+        case RUNNABLE:
+          str_state = "RUNNABLE";
+          break;
+        case RUNNING:
+          str_state = "RUNNING";
+          break;
+        case ZOMBIE:
+          str_state = "ZOMBIE";
+          break;
+      }
+      cprintf("%s    %d    %s    %d\n", p->name, p->pid, str_state, p->nice);
     }
   } else {
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if ((p->pid == pid) & (p->state != UNUSED)) {
+      char str_state [8];
+      switch (p->state) {
+        case EMBRYO:
+          str_state = "EMBRYO";
+          break;
+        case SLEEPING:
+          str_state = "SLEEPING";
+          break;
+        case RUNNABLE:
+          str_state = "RUNNABLE";
+          break;
+        case RUNNING:
+          str_state = "RUNNING";
+          break;
+        case ZOMBIE:
+          str_state = "ZOMBIE";
+          break;
+      }
         cprintf("name    pid    state    nice    \n");
-        cprintf("%s    %d    %s    %d\n", p->name, p->pid, p->state, p->nice);
+        cprintf("%s    %d    %s    %d\n", p->name, p->pid, str_state, p->nice);
         break;
       }
     }
