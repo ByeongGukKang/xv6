@@ -576,11 +576,33 @@ setnice(int pid, int value)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->nice = value;
-      cprintf("Nice value set to %d\n", p->nice);
       release(&ptable.lock);
       return 0;
     }
   }
   release(&ptable.lock);
   return -1;
+}
+
+void
+ps(int pid)
+{
+  struct proc *p;
+  if (pid==0) {
+    cprintf("name    pid    state    nice    \n");
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+      if (p->state == UNUSED) {
+        continue;
+      }
+      cprintf("%s    %d    %s    %d\n", p->name, p->pid, p->state, p->nice);
+    }
+  } else {
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+      if ((p->pid == pid) & (p->state != UNUSED)) {
+        cprintf("name    pid    state    nice    \n");
+        cprintf("%s    %d    %s    %d\n", p->name, p->pid, p->state, p->nice);
+        break;
+      }
+    }
+  }
 }
