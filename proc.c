@@ -568,14 +568,14 @@ getnice(int pid)
 }
 
 int
-setnice(int pid, int new_nice)
+setnice(int pid, int value)
 {
   struct proc *p;
 
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
-      p->nice = new_nice;
+      p->nice = value;
       cprintf("Nice value set to %d\n", p->nice);
       release(&ptable.lock);
       return 0;

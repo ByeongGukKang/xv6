@@ -24,6 +24,7 @@ int main()
             iswrongpid = 1;
         }
 
+        nice = getnice(i);
         if (getnice(i) == -1) {
             iswrongpid = 1;
         } else {
