@@ -576,6 +576,7 @@ setnice(int pid, int new_nice)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->nice = new_nice;
+      cprintf("Nice value set to %d\n", p->nice);
       release(&ptable.lock);
       return 0;
     }
