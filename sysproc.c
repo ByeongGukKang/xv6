@@ -99,3 +99,28 @@ sys_getpname(void)
     return -1;
   return getpname(pid);
 }
+
+int
+sys_getnice(void)
+{
+  int pid;
+
+  if (argint(0, &pid) < 0)
+    return -1;
+  return getnice(pid);
+}
+
+int
+sys_setnice(void)
+{
+  int pid, value;
+
+  if (argint(0, &pid) < 0 || argint(1, &value) < 0) {
+    return -1;
+  } else if (value < 0 || value > 39) {
+    printf(1, "Invalid nice value, Nice value must be 0~39.\n");
+    return -1;
+  }
+  
+  return setnice(pid, value);
+}
