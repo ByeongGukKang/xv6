@@ -533,6 +533,7 @@ procdump(void)
   }
 }
 
+int
 getpname(int pid)
 {
   struct proc *p;
