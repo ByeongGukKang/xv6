@@ -596,6 +596,9 @@ ps(int pid)
       }
       char str_state [8];
       switch (p->state) {
+        case UNUSED:
+          str_state = "UNUSED";
+          break;
         case EMBRYO:
           str_state = "EMBRYO";
           break;
@@ -619,6 +622,9 @@ ps(int pid)
       if ((p->pid == pid) & (p->state != UNUSED)) {
       char str_state [8];
       switch (p->state) {
+        case UNUSED:
+          str_state = "UNUSED";
+          break;
         case EMBRYO:
           str_state = "EMBRYO";
           break;
