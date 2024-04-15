@@ -61,7 +61,3 @@ struct proc {
 //   expandable heap
 
 extern int wgtarr[40];
-typedef struct {
-  struct spinlock lock;
-  struct proc proc[NPROC];
-} pTable;
