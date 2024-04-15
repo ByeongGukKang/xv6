@@ -7,6 +7,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "traps.h"
+#include "trap.h"
 
 struct {
   struct spinlock lock;
@@ -602,7 +603,9 @@ ps(int pid)
 {
   struct proc *p;
   if (pid==0) {
+    acquire(&tickslock);
     cprintf("name    pid    state    nice    runtime/weight    runtime    vruntime    tick    %d\n", ticks*1000);
+    release(&tickslock);
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if (p->state == UNUSED) {
         continue;
@@ -631,7 +634,9 @@ ps(int pid)
   } else {
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if ((p->pid == pid) & (p->state != UNUSED)) {
+        acquire(&tickslock);
         cprintf("name    pid    state    nice    runtime/weight    runtime    vruntime    tick    %d\n", ticks*1000);
+        release(&tickslock);
         switch (p->state) {
           case UNUSED:
             cprintf("%s    %d    %s    %d    %d    %d    %d\n", p->name, p->pid, "UNUSED", p->nice, 0, p->runtime, p->vruntime);
