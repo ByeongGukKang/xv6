@@ -1,5 +1,8 @@
 // x86 trap and interrupt constants.
 
+extern unsigned int ticks; // [UDF] Timer ticks
+// extern struct spinlock tickslock; // [UDF] Timer ticks lock
+
 // Processor-defined:
 #define T_DIVIDE         0      // divide error
 #define T_DEBUG          1      // debug exception
@@ -35,6 +38,3 @@
 #define IRQ_IDE         14
 #define IRQ_ERROR       19
 #define IRQ_SPURIOUS    31
-
-unsigned int ticks; // [UDF] Timer ticks
-// extern struct spinlock tickslock; // [UDF] Timer ticks lock
