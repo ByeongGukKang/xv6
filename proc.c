@@ -9,7 +9,12 @@
 #include "traps.h"
 #include "trap.h"
 
-struct {
+// struct {
+//   struct spinlock lock;
+//   struct proc proc[NPROC];
+// } ptable;
+
+extern struct {
   struct spinlock lock;
   struct proc proc[NPROC];
 } ptable;
