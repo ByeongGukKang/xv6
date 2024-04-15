@@ -102,6 +102,8 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->nice = 20; // [UDF] Default nice value
+  p->runtime = 0; // [UDF] Default runtime
+  p->vruntime = 0; // [UDF] Default vruntime
 
   release(&ptable.lock);
 
