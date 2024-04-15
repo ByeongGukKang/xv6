@@ -199,6 +199,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
+  np->vruntime = curproc->vruntime; // [UDF] Get parent's vruntime
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
@@ -589,29 +590,29 @@ ps(int pid)
 {
   struct proc *p;
   if (pid==0) {
-    cprintf("name    pid    state    nice    \n");
+    cprintf("name    pid    state    nice    runtime/weight    runtime    vruntime    tick    \n");
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if (p->state == UNUSED) {
         continue;
       }
       switch (p->state) {
         case UNUSED:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "UNUSED", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "UNUSED", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
         case EMBRYO:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "EMBRYO", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
         case SLEEPING:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "SLEEPING", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
         case RUNNABLE:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "RUNNABLE", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
         case RUNNING:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "RUNNING", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "RUNNING", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
         case ZOMBIE:
-          cprintf("%s    %d    %s    %d\n", p->name, p->pid, "ZOMBIE", p->nice);
+          cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, 0, p->runtime, p->vruntime, p->tick);
           break;
       }
     }
@@ -621,22 +622,22 @@ ps(int pid)
         cprintf("name    pid    state    nice    \n");
         switch (p->state) {
           case UNUSED:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "UNUSED", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "UNUSED", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
           case EMBRYO:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "EMBRYO", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
           case SLEEPING:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "SLEEPING", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
           case RUNNABLE:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "RUNNABLE", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
           case RUNNING:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "RUNNING", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "RUNNING", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
           case ZOMBIE:
-            cprintf("%s    %d    %s    %d\n", p->name, p->pid, "ZOMBIE", p->nice);
+            cprintf("%s    %d    %s    %d    %d    %d    %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, 0, p->runtime, p->vruntime, p->tick);
             break;
         }
         break;
