@@ -36,4 +36,4 @@
 #define IRQ_ERROR       19
 #define IRQ_SPURIOUS    31
 
-// extern int ticks; // [UDF] Timer ticks
+extern int ticks; // [UDF] Timer ticks
