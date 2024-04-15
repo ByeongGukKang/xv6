@@ -61,3 +61,4 @@ struct proc {
 //   expandable heap
 
 extern int wgtarr[40];
+extern struct ptable;

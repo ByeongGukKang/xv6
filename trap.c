@@ -14,8 +14,6 @@ extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
 uint ticks;
 
-struct spinlock proclock;
-
 void
 tvinit(void)
 {
@@ -26,7 +24,6 @@ tvinit(void)
   SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
 
   initlock(&tickslock, "time");
-  initlock(&proclock, "proc");
 }
 
 void
@@ -106,10 +103,10 @@ trap(struct trapframe *tf)
   // Force process to give up CPU on clock tick.
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING && tf->trapno == T_IRQ0+IRQ_TIMER) {
-    acquire(&proclock);
+    acquire(&ptable.lock);
     myproc()->runtime = myproc()->runtime + 1000;
     myproc()->vruntime = myproc()->vruntime + 1024000/wgtarr[myproc()->nice];
-    release(&proclock);
+    release(&ptable.lock);
     yield();
   }
 
