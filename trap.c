@@ -55,7 +55,7 @@ trap(struct trapframe *tf)
       release(&tickslock);
 
       myproc()->runtime = myproc()->runtime + 1000;
-      myproc()->vruntime = myproc()->vruntime + wgtarr[myproc()->nice];
+      // myproc()->vruntime = myproc()->vruntime + wgtarr[myproc()->nice];
     }
     lapiceoi();
     break;
