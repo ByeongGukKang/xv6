@@ -22,7 +22,7 @@ extern void trapret(void);
 
 static void wakeup1(void *chan);
 
-wgtarr = {
+int wgtarr[40] = {
   /*  0*/ 88761, 71755, 56483, 46273, 36291,
   /*  5*/ 29154, 23254, 18705, 14949, 11916,
   /* 10*/  9548,  7620,  6100,  4904,  3906,
