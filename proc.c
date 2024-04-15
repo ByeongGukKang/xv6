@@ -612,22 +612,22 @@ ps(int pid)
       }
       switch (p->state) {
         case UNUSED:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "UNUSED", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "UNUSED", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
         case EMBRYO:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
         case SLEEPING:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
         case RUNNABLE:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
         case RUNNING:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "RUNNING", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "RUNNING", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
         case ZOMBIE:
-          cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, 0, p->runtime, p->vruntime);
+          cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
           break;
       }
     }
@@ -639,22 +639,22 @@ ps(int pid)
         release(&tickslock);
         switch (p->state) {
           case UNUSED:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "UNUSED", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "UNUSED", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
           case EMBRYO:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "EMBRYO", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
           case SLEEPING:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "SLEEPING", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
           case RUNNABLE:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "RUNNABLE", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
           case RUNNING:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "RUNNING", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "RUNNING", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
           case ZOMBIE:
-            cprintf("%s    %d      %s   %d      %d    %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, 0, p->runtime, p->vruntime);
+            cprintf("%s    %d      %s   %d      %d            %d    %d\n", p->name, p->pid, "ZOMBIE", p->nice, wgtarr[p->runtime]/p->runtime, p->runtime, p->vruntime);
             break;
         }
         break;
