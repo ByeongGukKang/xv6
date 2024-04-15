@@ -36,4 +36,5 @@
 #define IRQ_ERROR       19
 #define IRQ_SPURIOUS    31
 
-extern uint ticks; // [UDF] Timer ticks
+extern unsigned int ticks; // [UDF] Timer ticks
+// extern struct spinlock tickslock; // [UDF] Timer ticks lock
