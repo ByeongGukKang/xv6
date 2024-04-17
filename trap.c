@@ -106,10 +106,11 @@ trap(struct trapframe *tf)
     myproc()->runtime  = myproc()->runtime + 1000;
     myproc()->vruntime = myproc()->vruntime + 1024000/wgtarr[myproc()->nice];
     myproc()->ticks++;
-    if(myproc()->ticks == myproc()->allocticks)
+    if(myproc()->ticks == myproc()->allocticks) {
       myproc()->ticks = 0;
       myproc()->allocticks = 0;
       yield();
+    }
   }
 
   // Check if the process has been killed since we yielded

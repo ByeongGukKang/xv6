@@ -357,8 +357,9 @@ scheduler(void)
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       tproc = p;
-      if(p->state != RUNNABLE)
+      if(p->state != RUNNABLE) {
         continue;
+      }
       if (p->vruntime < minvruntime) {
         minvruntime = p->vruntime;
         tproc = p;
