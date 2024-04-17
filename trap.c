@@ -109,6 +109,7 @@ trap(struct trapframe *tf)
     if(myproc()->ticks == myproc()->allocticks) {
       myproc()->ticks = 0;
       myproc()->allocticks = 0;
+      myproc()->vruntime = myproc()->vruntime - 1024000/wgtarr[myproc()->nice];
       yield();
     }
   }
