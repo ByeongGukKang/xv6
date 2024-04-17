@@ -357,6 +357,12 @@ scheduler(void)
       if(p->state != RUNNABLE)
         continue;
 
+      int wgtsum = 0;
+      for(p1 = ptable.proc; p1 < &ptable.proc[NPROC]; p1++){
+        if(p1->state == RUNNABLE)
+          wgtsum = wgtsum + wgtarr[p1->nice];
+      }
+
       tproc = p;
       for(p1 = ptable.proc; p1 < &ptable.proc[NPROC]; p1++){
         if((p1->state == RUNNABLE) && (tproc->vruntime > p1->vruntime))
@@ -371,6 +377,11 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      if (wgtsum != 0) {
+        p->allocticks = 10*wgtarr[p->nice]/wgtsum;
+      } else {
+        p->vruntime = 0;
+      }
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
