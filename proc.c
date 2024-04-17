@@ -343,13 +343,14 @@ scheduler(void)
   struct cpu *c = mycpu();
   c->proc = 0;
   
-  struct proc *tproc;
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
+    struct proc *tproc;
     uint minvruntime = 4294967295;
+
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
