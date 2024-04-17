@@ -359,7 +359,7 @@ scheduler(void)
           continue;
         if (p->vruntime <= minvruntime) {
           minvruntime = p->vruntime;
-          tproc = p;
+          tproc = &p;
           isfound = 1;
         }
       }
