@@ -351,25 +351,26 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
-    acquire(&ptable.lock);
     int isfound = 0;
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
-      if (p->vruntime <= minvruntime) {
-        minvruntime = p->vruntime;
-        tproc = p;
-        isfound = 1;
+    acquire(&ptable.lock);
+    for(;;) {
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+        if (p->vruntime <= minvruntime) {
+          minvruntime = p->vruntime;
+          tproc = p;
+          isfound = 1;
+        }
+      }
+      if (isfound == 1) {
+        break;
       }
     }
 
     // Switch to chosen process.  It is the process's job
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
-    if (isfound == 0) {
-      release(&ptable.lock);
-      continue;
-    }
     c->proc = tproc;
     switchuvm(p);
     tproc->state = RUNNING;
