@@ -356,7 +356,6 @@ scheduler(void)
     uint wgtsum = 0;
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      tproc = p;
       if(p->state != RUNNABLE) {
         continue;
       }
@@ -385,8 +384,8 @@ scheduler(void)
     // Process is done running for now.
     // It should have changed its p->state before coming back.
     c->proc = 0;
+    release(&ptable.lock);
   }
-  release(&ptable.lock);
 }
 
 
