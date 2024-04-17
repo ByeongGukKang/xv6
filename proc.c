@@ -353,19 +353,19 @@ scheduler(void)
     // Loop over process table looking for process to run.
     int isfound = 0;
     acquire(&ptable.lock);
-    for(;;) {
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-        if(p->state != RUNNABLE)
-          continue;
-        if (p->vruntime <= minvruntime) {
-          minvruntime = p->vruntime;
-          tproc = p;
-          isfound = 1;
-        }
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
+      if (p->vruntime <= minvruntime) {
+        minvruntime = p->vruntime;
+        tproc = p;
+        isfound = 1;
       }
-      if (isfound == 1) {
-        break;
-      }
+    }
+
+    if (isfound == 0) {
+      release(&ptable.lock);
+      continue;
     }
 
     // Switch to chosen process.  It is the process's job
