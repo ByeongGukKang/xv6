@@ -371,14 +371,15 @@ scheduler(void)
     // Switch to chosen process.  It is the process's job
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
-    c->proc = tproc;
+    if (wgtsum == 0) {
+      tproc->vruntime = 0;
+      release(&ptable.lock);
+      continue;
+    }
     switchuvm(tproc);
     tproc->state = RUNNING;
     tproc->ticks = 0;
     tproc->allocticks = 10*wgtarr[tproc->nice]/wgtsum;
-    if (wgtsum == 0) {
-      tproc->vruntime = 0;
-    }
 
     swtch(&(c->scheduler), tproc->context);
     switchkvm();
