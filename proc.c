@@ -372,6 +372,8 @@ scheduler(void)
     if (wgtsum == 0) {
       tproc = c->proc;
       tproc->vruntime = 0;
+      release(&ptable.lock);
+      continue;
     }
     switchuvm(tproc);
     tproc->state = RUNNING;
