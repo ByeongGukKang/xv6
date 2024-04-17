@@ -104,6 +104,8 @@ found:
   p->nice = 20; // [UDF] Default nice value
   p->runtime = 0; // [UDF] Default runtime
   p->vruntime = 0; // [UDF] Default vruntime
+  p->ticks = 0; // [UDF] Default ticks
+  p->allocticks = 0; // [UDF] Default allocticks
 
   release(&ptable.lock);
 
@@ -344,29 +346,26 @@ scheduler(void)
   c->proc = 0;
 
   struct proc *tproc;
-  uint minvruntime = 4294967294;
+  uint minvruntime = 4294967295;
 
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
-    int isfound = 0;
+    uint wgtsum = 0;
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      tproc = p;
       if(p->state != RUNNABLE)
         continue;
-      if (p->vruntime <= minvruntime) {
+      if (p->vruntime < minvruntime) {
         minvruntime = p->vruntime;
         tproc = p;
-        isfound = 1;
       }
+      wgtsum = wgtsum + wgtarr[p->nice];
     }
 
-    if (isfound == 0) {
-      release(&ptable.lock);
-      continue;
-    }
 
     // Switch to chosen process.  It is the process's job
     // to release ptable.lock and then reacquire it
@@ -374,6 +373,10 @@ scheduler(void)
     c->proc = tproc;
     switchuvm(tproc);
     tproc->state = RUNNING;
+    tproc->allocticks = 10*wgtarr[tproc->nice]/wgtsum;
+    if (wgtsum == 0) {
+      tproc->vruntime = 0;
+    }
 
     swtch(&(c->scheduler), tproc->context);
     switchkvm();
@@ -381,9 +384,10 @@ scheduler(void)
     // Process is done running for now.
     // It should have changed its p->state before coming back.
     c->proc = 0;
-    release(&ptable.lock);
   }
+  release(&ptable.lock);
 }
+
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores

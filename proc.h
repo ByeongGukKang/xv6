@@ -52,6 +52,8 @@ struct proc {
   int nice;                    // [UDF] Process nice value
   int runtime;                 // [UDF] Process runtime
   int vruntime;                // [UDF] Process vruntime
+  int ticks;                   // [UDF] Process ticks
+  int allocticks;              // [UDF] Process allocticks
 };
 
 // Process memory is laid out contiguously, low addresses first:

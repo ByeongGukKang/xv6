@@ -105,7 +105,11 @@ trap(struct trapframe *tf)
   if(myproc() && myproc()->state == RUNNING && tf->trapno == T_IRQ0+IRQ_TIMER) {
     myproc()->runtime  = myproc()->runtime + 1000;
     myproc()->vruntime = myproc()->vruntime + 1024000/wgtarr[myproc()->nice];
-    yield();
+    myproc()->ticks++;
+    if(myproc()->ticks == myproc()->allocticks)
+      myproc()->ticks = 0;
+      myproc()->allocticks = 0;
+      yield();
   }
 
   // Check if the process has been killed since we yielded
