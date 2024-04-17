@@ -355,7 +355,6 @@ scheduler(void)
     // Loop over process table looking for process to run.
     uint wgtsum = 0;
     acquire(&ptable.lock);
-    tproc = c->proc;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE) {
         continue;
@@ -372,6 +371,7 @@ scheduler(void)
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
     if (wgtsum == 0) {
+      tproc = c->proc;
       tproc->vruntime = 0;
       release(&ptable.lock);
       continue;
