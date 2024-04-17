@@ -354,8 +354,8 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-      minvruntime = (p->vruntime < minvruntime) ? p->vruntime : minvruntime;
-      if (minvruntime == p->vruntime) {
+      if (p->vruntime < minvruntime) {
+        minvruntime = p->vruntime;
         tproc = p;
       }
     }
