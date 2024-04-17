@@ -346,7 +346,6 @@ scheduler(void)
   c->proc = 0;
 
   struct proc *tproc;
-  uint minvruntime = 4294967295;
 
   for(;;){
     // Enable interrupts on this processor.
@@ -355,17 +354,17 @@ scheduler(void)
     // Loop over process table looking for process to run.
     uint wgtsum = 0;
     acquire(&ptable.lock);
+    int minvruntime = c->proc->vruntime;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE) {
         continue;
       }
-      if (p->vruntime <= minvruntime) {
+      if (p->vruntime < minvruntime) {
         minvruntime = p->vruntime;
         tproc = p;
       }
       wgtsum = wgtsum + wgtarr[p->nice];
     }
-
 
     // Switch to chosen process.  It is the process's job
     // to release ptable.lock and then reacquire it
@@ -373,8 +372,6 @@ scheduler(void)
     if (wgtsum == 0) {
       tproc = c->proc;
       tproc->vruntime = 0;
-      release(&ptable.lock);
-      continue;
     }
     switchuvm(tproc);
     tproc->state = RUNNING;
