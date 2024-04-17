@@ -345,45 +345,40 @@ scheduler(void)
   struct cpu *c = mycpu();
   c->proc = 0;
 
-  struct proc *tproc;
-
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
-    uint wgtsum = 0;
     acquire(&ptable.lock);
-    tproc = c->proc;
-    int minvruntime = c->proc->vruntime;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE) {
+      struct proc *p1 = 0;
+      struct proc *tproc = 0;
+      if(p->state != RUNNABLE)
         continue;
+
+      tproc = p;
+      for(p1 = ptable.proc; p1 < &ptable.proc[NPROC]; p1++){
+        if((p1->state == RUNNABLE) && (tproc->vruntime > p1->vruntime))
+          tproc = p1;
       }
-      if (p->vruntime < minvruntime) {
-        minvruntime = p->vruntime;
-        tproc = p;
-      }
-      wgtsum = wgtsum + wgtarr[p->nice];
+
+      if(tproc != 0)
+        p = tproc;
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
+
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
     }
-
-    // Switch to chosen process.  It is the process's job
-    // to release ptable.lock and then reacquire it
-    // before jumping back to us.
-    if (wgtsum == 0) {
-      tproc->vruntime = 0;
-    }
-    switchuvm(tproc);
-    tproc->state = RUNNING;
-    tproc->ticks = 0;
-    tproc->allocticks = 10000*wgtarr[tproc->nice]/wgtsum;
-
-    swtch(&(c->scheduler), tproc->context);
-    switchkvm();
-
-    // Process is done running for now.
-    // It should have changed its p->state before coming back.
-    c->proc = 0;
     release(&ptable.lock);
   }
 }
