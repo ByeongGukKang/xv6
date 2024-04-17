@@ -374,6 +374,7 @@ scheduler(void)
     c->proc = tproc;
     switchuvm(tproc);
     tproc->state = RUNNING;
+    tproc->ticks = 0;
     tproc->allocticks = 10*wgtarr[tproc->nice]/wgtsum;
     if (wgtsum == 0) {
       tproc->vruntime = 0;
