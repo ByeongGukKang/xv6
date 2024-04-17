@@ -359,7 +359,7 @@ scheduler(void)
       if(p->state != RUNNABLE) {
         continue;
       }
-      if (p->vruntime < minvruntime) {
+      if (p->vruntime <= minvruntime) {
         minvruntime = p->vruntime;
         tproc = p;
       }
