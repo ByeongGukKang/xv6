@@ -359,7 +359,7 @@ scheduler(void)
           continue;
         if (p->vruntime <= minvruntime) {
           minvruntime = p->vruntime;
-          tproc = &p;
+          tproc = p;
           isfound = 1;
         }
       }
@@ -372,7 +372,7 @@ scheduler(void)
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
     c->proc = tproc;
-    switchuvm(p);
+    switchuvm(tproc);
     tproc->state = RUNNING;
 
     swtch(&(c->scheduler), tproc->context);
