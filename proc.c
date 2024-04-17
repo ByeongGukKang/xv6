@@ -342,28 +342,34 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
+
+  struct proc *tproc;
+  uint minvruntime = 4294967295;
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
-    struct proc *tproc;
-    uint minvruntime = 4294967295;
-
     acquire(&ptable.lock);
+    int isfound = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-      if (p->vruntime < minvruntime) {
+      if (p->vruntime <= minvruntime) {
         minvruntime = p->vruntime;
         tproc = p;
+        isfound = 1;
       }
     }
 
     // Switch to chosen process.  It is the process's job
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
+    if (isfound == 0) {
+      release(&ptable.lock);
+      continue;
+    }
     c->proc = tproc;
     switchuvm(p);
     tproc->state = RUNNING;
