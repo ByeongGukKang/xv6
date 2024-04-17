@@ -344,7 +344,7 @@ scheduler(void)
   c->proc = 0;
 
   struct proc *tproc;
-  uint minvruntime = 4294967295;
+  uint minvruntime = 4294967294;
 
   for(;;){
     // Enable interrupts on this processor.
