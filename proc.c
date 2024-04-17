@@ -354,6 +354,7 @@ scheduler(void)
     // Loop over process table looking for process to run.
     uint wgtsum = 0;
     acquire(&ptable.lock);
+    tproc = c->proc;
     int minvruntime = c->proc->vruntime;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE) {
@@ -370,15 +371,12 @@ scheduler(void)
     // to release ptable.lock and then reacquire it
     // before jumping back to us.
     if (wgtsum == 0) {
-      tproc = c->proc;
       tproc->vruntime = 0;
-      release(&ptable.lock);
-      continue;
     }
     switchuvm(tproc);
     tproc->state = RUNNING;
     tproc->ticks = 0;
-    tproc->allocticks = 10*wgtarr[tproc->nice]/wgtsum;
+    tproc->allocticks = 10000*wgtarr[tproc->nice]/wgtsum;
 
     swtch(&(c->scheduler), tproc->context);
     switchkvm();
